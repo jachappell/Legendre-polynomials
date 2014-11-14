@@ -44,19 +44,19 @@
 namespace Legendre
 {
   // n = 0
-  template <class T> inline T P0(T x)
+  template <class T> inline T P0(const T& x)
   {
     return static_cast<T>(1.0) ;
   }
 
   // n = 1
-  template <class T> inline T P1(T x)
+  template <class T> inline T P1(const T& x)
   {
     return x ;
   }
 
   // n = 2
-  template <class T> inline T P2(T x)
+  template <class T> inline T P2(const T& x)
   {
     return ((static_cast<T>(3.0) * x*x) - static_cast<T>(1.0)) *
         static_cast<T>(0.5) ;
@@ -65,7 +65,7 @@ namespace Legendre
 /*
  *	Pn(x)
  */
-  template <class T> inline T Pn(unsigned int n, T x)
+  template <class T> inline T Pn(unsigned int n, const T& x)
   {
     if (n == 0)
     {
