@@ -11,9 +11,9 @@ int main()
   cout.precision(5) ;
   for (unsigned int n = 0 ; n <= 5 ; n++)
   {
-    for (double x = -1.0 ; x <= 1.0 ; x = x + 0.1)
+    for (double x = -1.0 ; x <= 1.0 ; x = x + 0.1, 0)
     { 
-      pn = Pn(n, x) ;
+      pn = Pn<double>(n, x) ;
       cout << "P" << n << "(" << x << ") = " << pn << endl ;
     }
     cout << endl ;
