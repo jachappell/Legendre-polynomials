@@ -2,7 +2,7 @@
 /**
  *  legendre.h -- C++ functions to evaluate Legendre polynomials
  *
- *  Copyright (C) 2014 by James A. Chappell
+ *  Copyright (C) 2019 by James A. Chappell
  *
  *  Permission is hereby granted, free of charge, to any person
  *  obtaining a copy of this software and associated documentation
@@ -32,6 +32,7 @@
  * History:
  * 29-sep-2005  created
  * 14-nov-2014  templates
+ * 01-nov-2019  deduced types
  */
 //==============
 
@@ -40,80 +41,77 @@
 /*
  *	Function calculates Legendre Polynomials Pn(x)
  */
-
-namespace Legendre
+namespace Storage_B
 {
-  // n = 0
-  template <class T> inline T P0(const T& x)
+  namespace Legendre
   {
-    return static_cast<T>(1.0) ;
-  }
+    // n = 0
+    template <class T> inline auto P0(const T& x)
+    {
+      return static_cast<T>(1) ;
+    }
 
-  // n = 1
-  template <class T> inline T P1(const T& x)
-  {
-    return x ;
-  }
+    // n = 1
+    template <class T> inline auto P1(const T& x)
+    {
+      return x ;
+    }
 
-  // n = 2
-  template <class T> inline T P2(const T& x)
-  {
-    return ((static_cast<T>(3.0) * x*x) - static_cast<T>(1.0)) *
-        static_cast<T>(0.5) ;
-  }
+    // n = 2
+    template <class T> inline auto P2(const T& x)
+    {
+      return ((static_cast<T>(3) * x*x) - static_cast<T>(1)) /
+        static_cast<T>(2) ;
+    }
 
 /*
- *	Pn(x)
+ *	  Pn(x)
  */
-  template <class T> inline T Pn(unsigned int n, const T& x)
-  {
-    if (n == 0)
+    template <class T> inline auto Pn(unsigned int n, const T& x)
     {
-      return P0<T>(x) ;
-    }
-    else if (n == 1)
-    {
-      return P1<T>(x) ;
-    }
-    else if (n == 2)
-    {
-      return P2<T>(x) ;
-    }
+      if (n == 0)
+      {
+        return P0<T>(x) ;
+      }
+      else if (n == 1)
+      {
+        return P1<T>(x) ;
+      }
+      else if (n == 2)
+      {
+        return P2<T>(x) ;
+      }
     
-    if (x == static_cast<T>(1.0))
-    {
-      return static_cast<T>(1.0) ;
-    }
+      if (x == static_cast<T>(1))
+      {
+        return static_cast<T>(1) ;
+      }
 
-    if (x == static_cast<T>(-1.0))
-    {
-      return ((n % 2 == 0) ? static_cast<T>(1.0) : static_cast<T>(-1.0)) ;
-    }
+      if (x == static_cast<T>(-1))
+      {
+        return ((n % 2 == 0) ? static_cast<T>(1) : static_cast<T>(-1)) ;
+      }
 
-    if ((x == static_cast<T>(0.0)) && (n % 2))
-    {
-      return static_cast<T>(0.0) ;
-    }
-
-/* We could simply do this:
-    return (double(((2 * n) - 1)) * x * Pn(n - 1, x) -
+/*  We could simply do this:
+      return (double(((2 * n) - 1)) * x * Pn(n - 1, x) -
           (double(n - 1)) * Pn(n - 2, x)) / (double)n ;
-   but it could be slow for large n */
+    but it could be slow for large n */
   
-    T pnm1(P2<T>(x)) ;
-    T pnm2(P1<T>(x)) ;
-    T pn(pnm1) ;
+      auto pnm1(P2<T>(x)) ;
+      auto pnm2(P1<T>(x)) ;
+      auto pn(pnm1) ;
 
-    for (unsigned int l = 3 ; l <= n ; l++)
-    { 
-      pn = (((static_cast<T>(2.0) * static_cast<T>(l)) - static_cast<T>(1.0))
-            * x * pnm1 - ((static_cast<T>(l) - static_cast<T>(1.0)) * pnm2))
+      for (auto l = 3u ; l <= n ; l++)
+      { 
+        pn = (((static_cast<T>(2) * static_cast<T>(l)) - static_cast<T>(1))
+            * x * pnm1 - ((static_cast<T>(l) - static_cast<T>(1)) * pnm2))
               / static_cast<T>(l) ;
-      pnm2 = pnm1;
-      pnm1 = pn;
-    }
+        pnm2 = pnm1;
+        pnm1 = pn;
+      }
 
-    return pn ;
+      return pn ;
+    }
   }
 }
 #endif

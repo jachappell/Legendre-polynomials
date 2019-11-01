@@ -2,7 +2,7 @@
 #include "legendre.h"
 
 using namespace std ;
-using namespace Legendre ;
+using namespace Storage_B::Legendre ;
 
 int main()
 {
