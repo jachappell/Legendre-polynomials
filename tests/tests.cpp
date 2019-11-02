@@ -2,55 +2,60 @@
 
 #include <memory>
 #include <random>
+#include <cmath>
 
 #define BOOST_TEST_MODULE Legendre
 #include <boost/test/included/unit_test.hpp>
 
 using namespace Storage_B;
 
-class Random {
-public:
-  Random()
+namespace
+{
+  class Random 
   {
-    std::random_device rd;
-    _gen = std::make_shared<std::mt19937>(rd());
-  }
+  public:
+    Random()
+    {
+      std::random_device rd;
+      _gen = std::make_shared<std::mt19937>(rd());
+    }
   
-  // no copy
-  Random(const Random&) = delete;
-  Random& operator=(const Random&) = delete;
+    // no copy
+    Random(const Random&) = delete;
+    Random& operator=(const Random&) = delete;
 
-  ~Random() = default;
+    ~Random() = default;
 
-  template <class T> auto one_to_one()
+    template <class T> auto one_to_one()
+    {
+      return random(static_cast<T>(-1), static_cast<T>(1));
+    }
+
+    template <class T> auto zero_to_one()
+    {
+      return random(static_cast<T>(0), static_cast<T>(1));
+    }
+
+    template <class T> auto random(T low, T high)
+    {
+      std::uniform_real_distribution<T> dis(low, high);
+
+      return dis(*_gen);
+    }
+
+  private:
+    std::shared_ptr<std::mt19937> _gen;
+  };
+
+  Random ran;
+
+  auto random_unsinged_int(unsigned int low, unsigned int high)
   {
-    return random(static_cast<T>(-1), static_cast<T>(1));
+    return static_cast<unsigned int>(std::round(ran.random<float>(low, high)));
   }
 
-  template <class T> auto zero_to_one()
-  {
-    return random(static_cast<T>(0), static_cast<T>(1));
-  }
-
-  template <class T> auto one_to_zero()
-  {
-    return random(static_cast<T>(-1), static_cast<T>(0));
-  }
-
-  template <class T> auto random(T low, T high)
-  {
-    std::uniform_real_distribution<T> dis(low, high);
-
-    return dis(*_gen);
-  }
-
-private:
-  std::shared_ptr<std::mt19937> _gen;
-};
-
-Random ran;
-
-auto tol = 0.00049;
+  auto tol = 0.00049;
+}
 
 // P0
 BOOST_AUTO_TEST_CASE(P0)
@@ -77,7 +82,7 @@ BOOST_AUTO_TEST_CASE(P1)
 // Pn(x) when x = 1
 BOOST_AUTO_TEST_CASE(PnXequalsOne)
 {
-  auto n = static_cast<unsigned int>(ran.random<float>(2, 10));
+  auto n = random_unsinged_int(2, 10);
 
   auto val = Legendre::Pn<double>(n, 1.0);
 
@@ -87,7 +92,7 @@ BOOST_AUTO_TEST_CASE(PnXequalsOne)
 // Pn(x) when x = -1
 BOOST_AUTO_TEST_CASE(PnXequalsMinusOne)
 {
-  auto n1 = static_cast<unsigned int>(ran.random<float>(2, 10));
+  auto n1 = random_unsinged_int(2, 10);
   auto n2 = n1 + 1;
 
   auto val1 = Legendre::Pn<long double>(n1, -1.0);
@@ -100,7 +105,7 @@ BOOST_AUTO_TEST_CASE(PnXequalsMinusOne)
 // Pn(x) when x = 0
 BOOST_AUTO_TEST_CASE(PnXequalsZero)
 {
-  auto n = static_cast<unsigned int>(ran.random<float>(2, 10));
+  auto n = random_unsinged_int(2, 10);
   if ((n % 2) == 0) n++;
 
   auto val = Legendre::Pn<float>(n, 0.0);

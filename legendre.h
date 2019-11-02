@@ -24,7 +24,7 @@
  */
 //=================================================================
 /*
- * legendre.h:  Version 0.02
+ * legendre.h:  Version 0.03
  * Created by James A. Chappell <rlrrlrll@gmail.com>
  * http://www.storage-b.com/math-numerical-analysis/18
  * Created 29 September 2005
@@ -48,20 +48,20 @@ namespace Storage_B
     // n = 0
     template <class T> inline auto P0(const T& x)
     {
-      return static_cast<T>(1) ;
+      return static_cast<T>(1);
     }
 
     // n = 1
     template <class T> inline auto P1(const T& x)
     {
-      return x ;
+      return x;
     }
 
     // n = 2
     template <class T> inline auto P2(const T& x)
     {
       return ((static_cast<T>(3) * x*x) - static_cast<T>(1)) /
-        static_cast<T>(2) ;
+        static_cast<T>(2);
     }
 
 /*
@@ -69,34 +69,26 @@ namespace Storage_B
  */
     template <class T> inline auto Pn(unsigned int n, const T& x)
     {
-      if (n == 0)
+      switch(n)
       {
-        return P0<T>(x) ;
-      }
-      else if (n == 1)
-      {
-        return P1<T>(x) ;
-      }
-      else if (n == 2)
-      {
-        return P2<T>(x) ;
-      }
-    
-      if (x == static_cast<T>(1))
-      {
-        return static_cast<T>(1) ;
-      }
+        case 0:
+          return P0<T>(x);
 
-      if (x == static_cast<T>(-1))
-      {
-        return ((n % 2 == 0) ? static_cast<T>(1) : static_cast<T>(-1)) ;
-      }
+        case 1:
+          return P1<T>(x);
 
+        case 2:
+          return P2<T>(x);
+
+        default:
+          break;
+      }
+      
 /*  We could simply do this:
-      return (double(((2 * n) - 1)) * x * Pn(n - 1, x) -
-          (double(n - 1)) * Pn(n - 2, x)) / (double)n ;
+      return (static_cast<T>(((2 * n) - 1)) * x * Pn(n - 1, x) -
+          (static_cast<T>(n - 1)) * Pn(n - 2, x)) / static_cast<T>(n);
     but it could be slow for large n */
-  
+
       auto pnm1(P2<T>(x)) ;
       auto pnm2(P1<T>(x)) ;
       auto pn(pnm1) ;
@@ -110,7 +102,7 @@ namespace Storage_B
         pnm1 = pn;
       }
 
-      return pn ;
+      return pn;
     }
   }
 }
