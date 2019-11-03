@@ -25,16 +25,6 @@ namespace
 
     ~Random() = default;
 
-    template <class T> auto one_to_one()
-    {
-      return random(static_cast<T>(-1), static_cast<T>(1));
-    }
-
-    template <class T> auto zero_to_one()
-    {
-      return random(static_cast<T>(0), static_cast<T>(1));
-    }
-
     template <class T> auto random(T low, T high)
     {
       std::uniform_real_distribution<T> dis(low, high);
@@ -61,8 +51,8 @@ namespace
 // P0
 BOOST_AUTO_TEST_CASE(P0)
 {
-  auto val1 = Legendre::P0<double>(ran.one_to_one<double>());
-  auto val2 = Legendre::Pn<double>(0, ran.one_to_one<double>());
+  auto val1 = Legendre::P0<double>(ran.random<double>(-1.0, 1.0));
+  auto val2 = Legendre::Pn<double>(0, ran.random<double>(-1.0, 1.0));
 
   BOOST_TEST(val1 == val2);
   BOOST_TEST(val1 == 1.0);
@@ -71,7 +61,7 @@ BOOST_AUTO_TEST_CASE(P0)
 // P1
 BOOST_AUTO_TEST_CASE(P1)
 {
-  auto x = ran.one_to_one<float>();
+  auto x = ran.random<float>(-1.0, 1.0);
 
   auto val1 = Legendre::P1<float>(x);
   auto val2 = Legendre::Pn<float>(1, x);
