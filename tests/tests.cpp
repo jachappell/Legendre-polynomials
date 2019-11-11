@@ -1,5 +1,7 @@
 #include "legendre.h"
 
+#include "Random.h"
+
 #include <memory>
 #include <random>
 
@@ -10,40 +12,9 @@ using namespace Storage_B;
 
 namespace
 {
-  class Random 
-  {
-  public:
-    Random()
-    {
-      std::random_device rd;
-      _gen = std::make_shared<std::mt19937>(rd());
-    }
-  
-    // no copy
-    Random(const Random&) = delete;
-    Random& operator=(const Random&) = delete;
-
-    ~Random() = default;
-
-    template <class T> auto random(T low, T high)
-    {
-      std::uniform_real_distribution<T> dis(low, high);
-
-      return dis(*_gen);
-    }
-
-    template <class T> auto random_int(T low, T high)
-    {
-      std::uniform_int_distribution<T> dis(low, high);
-
-      return dis(*_gen);
-    }
-
-  private:
-    std::shared_ptr<std::mt19937> _gen;
-  };
-
-  Random ran;
+  Random<double> dRan(-1.0, 1.0);
+  Random<float> fRan(-1.0f, 1.0f);
+  Random<unsigned int> iRan(2, 10);
 
   auto tol = 0.00049;
 }
@@ -51,8 +22,8 @@ namespace
 // P0
 BOOST_AUTO_TEST_CASE(P0)
 {
-  auto val1 = Legendre::P0<double>(ran.random<double>(-1.0, 1.0));
-  auto val2 = Legendre::Pn<double>(0, ran.random<double>(-1.0, 1.0));
+  auto val1 = Legendre::P0<double>(dRan());
+  auto val2 = Legendre::Pn<double>(0, dRan());
 
   BOOST_TEST(val1 == val2);
   BOOST_TEST(val1 == 1.0);
@@ -61,7 +32,7 @@ BOOST_AUTO_TEST_CASE(P0)
 // P1
 BOOST_AUTO_TEST_CASE(P1)
 {
-  auto x = ran.random<float>(-1.0, 1.0);
+  auto x = fRan();
 
   auto val1 = Legendre::P1<float>(x);
   auto val2 = Legendre::Pn<float>(1, x);
@@ -73,7 +44,7 @@ BOOST_AUTO_TEST_CASE(P1)
 // Pn(x) when x = 1
 BOOST_AUTO_TEST_CASE(PnXequalsOne)
 {
-  auto n = ran.random_int<unsigned int>(2, 10);
+  auto n = iRan();
 
   auto val = Legendre::Pn<double>(n, 1.0);
 
@@ -83,7 +54,7 @@ BOOST_AUTO_TEST_CASE(PnXequalsOne)
 // Pn(x) when x = -1
 BOOST_AUTO_TEST_CASE(PnXequalsMinusOne)
 {
-  auto n1 = ran.random_int<unsigned int>(2, 10);
+  auto n1 = iRan();
   auto n2 = n1 + 1;
 
   auto val1 = Legendre::Pn<long double>(n1, -1.0);
@@ -96,7 +67,7 @@ BOOST_AUTO_TEST_CASE(PnXequalsMinusOne)
 // Pn(x) when x = 0
 BOOST_AUTO_TEST_CASE(PnXequalsZero)
 {
-  auto n = ran.random_int<unsigned int>(2, 10);
+  auto n = iRan();
   if ((n % 2) == 0) n++;
 
   auto val = Legendre::Pn<float>(n, 0.0);

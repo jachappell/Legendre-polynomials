@@ -29,6 +29,9 @@
 *.app
 example/example
 tests/tests
+tests/Random.h
+tests/Generator.h
+tests/Generator.cpp
 
 # vim
 *.swp
