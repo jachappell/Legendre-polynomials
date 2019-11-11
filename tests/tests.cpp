@@ -3,7 +3,6 @@
 #include "Random.h"
 
 #include <memory>
-#include <random>
 
 #define BOOST_TEST_MODULE Legendre
 #include <boost/test/included/unit_test.hpp>
