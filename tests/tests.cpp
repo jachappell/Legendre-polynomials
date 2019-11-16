@@ -15,7 +15,7 @@ namespace
   Random<float> fRan(-1.0f, 1.0f);
   Random<unsigned int> iRan(2, 10);
 
-  auto tol = 0.00049;
+  auto tol = boost::test_tools::tolerance(0.00049);
 }
 
 // P0
@@ -74,7 +74,6 @@ BOOST_AUTO_TEST_CASE(PnXequalsZero)
   BOOST_TEST(val == 0.0);
 }
 
-
 BOOST_AUTO_TEST_CASE(Pn0)
 {
   BOOST_TEST(Legendre::Pn<float>(2, 0.0) == -0.5);
@@ -83,34 +82,24 @@ BOOST_AUTO_TEST_CASE(Pn0)
 
 BOOST_AUTO_TEST_CASE(Pn05)
 {
-  BOOST_TEST(Legendre::Pn<float>(2, 0.05) == -0.4963,
-                                  boost::test_tools::tolerance(tol));
-  BOOST_TEST(Legendre::Pn<float>(3, 0.05) == -0.0747,
-                                  boost::test_tools::tolerance(tol));
-  BOOST_TEST(Legendre::Pn<float>(4, 0.05) == 0.3657,
-                                  boost::test_tools::tolerance(tol));
-  BOOST_TEST(Legendre::Pn<float>(5, 0.05) == 0.0927,
-                                  boost::test_tools::tolerance(tol));
+  BOOST_TEST(Legendre::Pn<float>(2, 0.05) == -0.4963, tol);
+  BOOST_TEST(Legendre::Pn<float>(3, 0.05) == -0.0747, tol);
+  BOOST_TEST(Legendre::Pn<float>(4, 0.05) == 0.3657, tol);
+  BOOST_TEST(Legendre::Pn<float>(5, 0.05) == 0.0927, tol);
 }
 
 BOOST_AUTO_TEST_CASE(Pn50)
 {
   BOOST_TEST(Legendre::Pn<float>(2, 0.5) == -0.1250);
   BOOST_TEST(Legendre::Pn<float>(3, 0.5) == -0.4375);
-  BOOST_TEST(Legendre::Pn<float>(4, 0.5) == -0.2891,
-                                  boost::test_tools::tolerance(tol));
-  BOOST_TEST(Legendre::Pn<float>(5, 0.5) == 0.0898,
-                                  boost::test_tools::tolerance(tol));
+  BOOST_TEST(Legendre::Pn<float>(4, 0.5) == -0.2891, tol);
+  BOOST_TEST(Legendre::Pn<float>(5, 0.5) == 0.0898, tol);
 }
 
 BOOST_AUTO_TEST_CASE(Pn95)
 {
-  BOOST_TEST(Legendre::Pn<float>(2, 0.95) == 0.8538,
-                                  boost::test_tools::tolerance(tol));
-  BOOST_TEST(Legendre::Pn<float>(3, 0.95) == 0.7184,
-                                  boost::test_tools::tolerance(tol));
-  BOOST_TEST(Legendre::Pn<float>(4, 0.95) == 0.5541,
-                                  boost::test_tools::tolerance(tol));
-  BOOST_TEST(Legendre::Pn<float>(5, 0.95) == 0.3727,
-                                  boost::test_tools::tolerance(tol));
+  BOOST_TEST(Legendre::Pn<float>(2, 0.95) == 0.8538, tol);
+  BOOST_TEST(Legendre::Pn<float>(3, 0.95) == 0.7184, tol);
+  BOOST_TEST(Legendre::Pn<float>(4, 0.95) == 0.5541, tol);
+  BOOST_TEST(Legendre::Pn<float>(5, 0.95) == 0.3727, tol);
 }
