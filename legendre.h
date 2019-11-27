@@ -95,9 +95,8 @@ namespace Storage_B
 
       for (auto m = 3u ; m <= n ; ++m)
       { 
-        pn = (((static_cast<T>(2) * static_cast<T>(m)) - static_cast<T>(1))
-            * x * pnm1 - (static_cast<T>(m - 1) * pnm2))
-              / static_cast<T>(m);
+        pn = ((static_cast<T>((2 * m) - 1)) * x * pnm1
+              - (static_cast<T>(m - 1) * pnm2)) / static_cast<T>(m);
         pnm2 = pnm1;
         pnm1 = pn;
       }
