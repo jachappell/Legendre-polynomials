@@ -89,15 +89,15 @@ namespace Storage_B
           (static_cast<T>(n - 1)) * Pn(n - 2, x)) / static_cast<T>(n);
     but it could be slow for large n */
 
-      auto pnm1(P2<T>(x)) ;
-      auto pnm2(P1<T>(x)) ;
-      auto pn(pnm1) ;
+      auto pnm1(P2<T>(x));
+      auto pnm2(P1<T>(x));
+      T pn;
 
-      for (auto l = 3u ; l <= n ; l++)
+      for (auto m = 3u ; m <= n ; ++m)
       { 
-        pn = (((static_cast<T>(2) * static_cast<T>(l)) - static_cast<T>(1))
-            * x * pnm1 - ((static_cast<T>(l) - static_cast<T>(1)) * pnm2))
-              / static_cast<T>(l) ;
+        pn = (((static_cast<T>(2) * static_cast<T>(m)) - static_cast<T>(1))
+            * x * pnm1 - (static_cast<T>(m - 1) * pnm2))
+              / static_cast<T>(m);
         pnm2 = pnm1;
         pnm1 = pn;
       }
